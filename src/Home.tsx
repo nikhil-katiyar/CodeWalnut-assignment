@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Plus, Clock } from 'lucide-react';
 import { TimerList } from './components/TimerList';
-import { AddTimerModal } from './components/AddTimerModal';
 import { Toaster } from 'sonner';
 import { useTimerStore } from './store/useTimerStore';
+import { TimerModal } from './components/TimerModal';
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,7 +39,8 @@ function Home() {
 
         <TimerList />
 
-        <AddTimerModal
+        <TimerModal
+          type='add'
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         />
