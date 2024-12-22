@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { X, Clock } from 'lucide-react';
 import { useTimerStore } from '../store/useTimerStore';
 import { validateTimerForm } from '../utils/validation';
 import { Timer } from '../types/timer';
+import ModalHeader from './ModalComponents/ModalHeader';
+import ModalCtas from './ModalComponents/ModalCtas';
 
 interface EditTimerModalProps {
   isOpen: boolean;
@@ -81,19 +82,7 @@ export const EditTimerModal: React.FC<EditTimerModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-blue-600" />
-            <h2 className="text-xl font-semibold">Edit Timer</h2>
-          </div>
-          <button 
-            onClick={handleClose}
-            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-        
+        <ModalHeader handleClose={handleClose} headerText="Edit Timer"/>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -184,26 +173,13 @@ export const EditTimerModal: React.FC<EditTimerModalProps> = ({
             )}
           </div>
           
-          <div className="flex justify-end gap-3 pt-4 border-t">
-            <button
-              type="button"
-              onClick={handleClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
-                isTitleValid && isTimeValid
-                  ? 'bg-blue-600 hover:bg-blue-700'
-                  : 'bg-blue-400 cursor-not-allowed'
-              }`}
-              disabled={!isTitleValid || !isTimeValid}
-            >
-              Save Changes
-            </button>
-          </div>
+          <ModalCtas 
+            handleClose={handleClose}
+            isTimeValid={isTimeValid}
+            isTitleValid={isTitleValid}
+            cancelCta='Cancel'
+            confirmCta='Save Changes'
+          />
         </form>
       </div>
     </div>
