@@ -1,3 +1,11 @@
+## Note (about Assignment completion):
+1. Completed the assignment withing given time frame
+2. Few points that i would like to share:
+   - Was not able to implement test cases as I have experience in jest and react testing library, and test cases were expected in Vitest. 
+   - I could have done it with help from google and documentation but I avoided it because it would have not been a true evaluation of my skills
+   - Other than that everything else works as expected
+3. PR Link -> https://github.com/nikhil-katiyar/CodeWalnut-assignment/pull/1
+
 # Timer App Assignment
 
 Welcome to the Timer App Assignment! This project is designed to evaluate your skills in React development, focusing on **UI implementation**, **code quality**, **state management**, and **best practices**. The project uses **React**, **Vite**, **Tailwind CSS**, and **Vitest** for testing.
