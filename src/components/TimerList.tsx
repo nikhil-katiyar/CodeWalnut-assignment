@@ -5,7 +5,6 @@ import { EmptyState } from './EmptyState';
 
 export const TimerList: React.FC = () => {
   const { timers } = useTimerStore();
-
   return (
     <div className="space-y-4 min-h-[400px]">
       {timers.length === 0 ? (
