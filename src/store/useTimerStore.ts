@@ -23,21 +23,23 @@ const timerSlice = createSlice({
       localStorage.setItem("timers", JSON.stringify(state))
     },
     toggleTimer: (state, action) => {
-      const timer = state.timers.find(timer => timer.id === action.payload);
+      const timer = state.timers.find(timer => timer.id === action.payload.id);
       if (timer) {
+        timer.remainingTime = action.payload.remainingTime
         timer.isRunning = !timer.isRunning;
       }
       localStorage.setItem("timers", JSON.stringify(state))
     },
-    updateTimer: (state, action) => {
-      const timer = state.timers.find(timer => timer.id === action.payload);
+    // updateTimer: (state, action) => {
+    //   console.log(action.payload)
+    //   const timer = state.timers.find(timer => timer.id === action.payload);
 
-      if (timer && timer.isRunning) {
-        timer.remainingTime -= 1;
-        timer.isRunning = timer.remainingTime > 0;
-      }
-      localStorage.setItem("timers", JSON.stringify(state))
-    },
+    //   if (timer && timer.isRunning) {
+    //     timer.remainingTime -= 1;
+    //     timer.isRunning = timer.remainingTime > 0;
+    //   }
+    //   localStorage.setItem("timers", JSON.stringify(state))
+    // },
     restartTimer: (state, action) => {
       const timer = state.timers.find(timer => timer.id === action.payload);
       if (timer) {
@@ -85,8 +87,8 @@ export const useTimerStore = () => {
     timers,
     addTimer: (timer: Omit<Timer, 'id' | 'createdAt'>) => dispatch(addTimer(timer)),
     deleteTimer: (id: string) => dispatch(deleteTimer(id)),
-    toggleTimer: (id: string) => dispatch(toggleTimer(id)),
-    updateTimer: (id: string) => dispatch(updateTimer(id)),
+    toggleTimer: ({id, remainingTime} :{id: string, remainingTime: number}) => dispatch(toggleTimer({id, remainingTime})),
+    // updateTimer: (id: string) => {dispatch(updateTimer(id))},
     restartTimer: (id: string) => dispatch(restartTimer(id)),
     editTimer: (id: string, updates: Partial<Timer>) => dispatch(editTimer({ id, updates })),
     setTimers: (timers: Timer[]) => dispatch(setTimers(timers))

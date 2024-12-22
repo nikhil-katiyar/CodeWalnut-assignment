@@ -15,7 +15,10 @@ interface TimerItemProps {
 }
 
 export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
-  const { toggleTimer, deleteTimer, updateTimer, restartTimer } = useTimerStore();
+  const { toggleTimer, deleteTimer, 
+    // updateTimer, 
+    restartTimer } = useTimerStore();
+  const [remainingTime, setRemainingTime] = useState(timer.remainingTime || timer.duration)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const intervalRef = useRef<number | null>(null);
   const timerAudio = TimerAudio.getInstance();
@@ -24,9 +27,8 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
   useEffect(() => {
     if (timer.isRunning) {
       intervalRef.current = window.setInterval(() => {
-        updateTimer(timer.id);
-        
-        if (timer.remainingTime <= 1 && !hasEndedRef.current) {
+        setRemainingTime(remainingTime-1)
+        if (remainingTime <= 1 && !hasEndedRef.current) {
           hasEndedRef.current = true;
           const audio = setInterval(() => timerAudio.play(), 1000)
           
@@ -47,10 +49,13 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
     }
 
     return () => clearInterval(intervalRef.current!);
-  }, [timer.isRunning, timer.id, timer.remainingTime, timer.title, timerAudio, updateTimer]);
+  }, [timer.isRunning, timer.id, remainingTime, timer.title, timerAudio, 
+    // updateTimer
+  ]);
 
   const handleRestart = () => {
     hasEndedRef.current = false;
+    setRemainingTime(timer.duration)
     restartTimer(timer.id);
   };
 
@@ -60,10 +65,10 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
   };
 
   const handleToggle = () => {
-    if (timer.remainingTime <= 0) {
+    if (remainingTime <= 0) {
       hasEndedRef.current = false;
     }
-    toggleTimer(timer.id);
+    toggleTimer({id: timer.id, remainingTime});
   };
 
   return (
@@ -113,16 +118,16 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
           </div>
           <div className="flex flex-col items-center mt-6">
             <div className="text-4xl font-mono font-bold text-gray-800 mb-4">
-              {formatTime(timer.remainingTime)}
+              {formatTime(remainingTime)}
             </div>
             
             <TimerProgress
-              progress={(timer.remainingTime / timer.duration) * 100}
+              progress={(remainingTime / timer.duration) * 100}
             />
             
             <TimerControls
               isRunning={timer.isRunning}
-              remainingTime={timer.remainingTime}
+              remainingTime={remainingTime}
               duration={timer.duration}
               onToggle={handleToggle}
               onRestart={handleRestart}

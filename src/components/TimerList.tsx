@@ -20,7 +20,7 @@ export const TimerList: React.FC = () => {
       ) : (
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {timers.map((timer) => (
-            <TimerItem key={timer.id} timer={timer} />
+            <TimerItem key={timer.id} timer={timer}/>
           ))}
         </div>
       )}
