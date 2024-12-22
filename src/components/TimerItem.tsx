@@ -8,6 +8,7 @@ import { TimerAudio } from '../utils/audio';
 import { TimerControls } from './TimerControls';
 import { TimerProgress } from './TimerProgress';
 import { TimerModal } from './TimerModal';
+import isMobile from '../utils/isMobile';
 
 interface TimerItemProps {
   timer: Timer;
@@ -39,6 +40,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
                 toast.dismiss()
               },
             },
+            position: isMobile() ? 'bottom-center' : 'top-right'
           });
         }
       }, 1000);
