@@ -73,7 +73,7 @@ export const {
   addTimer,
   deleteTimer,
   toggleTimer,
-  updateTimer,
+  // updateTimer,
   restartTimer,
   editTimer,
   setTimers

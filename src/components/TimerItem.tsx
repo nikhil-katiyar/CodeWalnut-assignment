@@ -8,7 +8,7 @@ import { TimerAudio } from '../utils/audio';
 import { TimerControls } from './TimerControls';
 import { TimerProgress } from './TimerProgress';
 import { TimerModal } from './TimerModal';
-import isMobile from '../utils/isMobile';
+import useIsMobile from '../utils/isMobile';
 
 interface TimerItemProps {
   timer: Timer;
@@ -18,6 +18,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
   const { toggleTimer, deleteTimer, 
     // updateTimer, 
     restartTimer } = useTimerStore();
+  const isMobile = useIsMobile()
   const [remainingTime, setRemainingTime] = useState(timer.remainingTime || timer.duration)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const intervalRef = useRef<number | null>(null);
@@ -27,11 +28,13 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
   useEffect(() => {
     if (timer.isRunning) {
       intervalRef.current = window.setInterval(() => {
-        setRemainingTime(remainingTime-1)
+        if(remainingTime) {
+          setRemainingTime(remainingTime-1)
+        }
         if (remainingTime <= 1 && !hasEndedRef.current) {
           hasEndedRef.current = true;
           const audio = setInterval(() => timerAudio.play(), 1000)
-          
+
           toast.success(`Timer "${timer.title}" has ended!`, {
             duration: Infinity,
             action: {
@@ -39,10 +42,12 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
               onClick: () => {
                 timerAudio.stop()
                 clearInterval(audio)
+                clearInterval(intervalRef.current!)
                 toast.dismiss()
+                handleRestart()
               },
             },
-            position: isMobile() ? 'bottom-center' : 'top-right'
+            position: isMobile ? 'bottom-center' : 'top-right'
           });
         }
       }, 1000);
@@ -52,6 +57,10 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
   }, [timer.isRunning, timer.id, remainingTime, timer.title, timerAudio, 
     // updateTimer
   ]);
+
+  useEffect(() => {
+    setRemainingTime(timer.remainingTime || timer.duration)
+  }, [timer])
 
   const handleRestart = () => {
     hasEndedRef.current = false;

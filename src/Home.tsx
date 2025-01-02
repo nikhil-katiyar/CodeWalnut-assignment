@@ -10,7 +10,7 @@ function Home() {
   const {setTimers} = useTimerStore()
   useEffect(() => {
       try {
-        const timers = JSON.parse(localStorage.getItem('timers') || '')
+        const timers = JSON.parse(localStorage.getItem('timers') || '{}')
         setTimers(timers.timers)
       }
       catch(err){
